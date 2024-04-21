@@ -49,34 +49,34 @@ namespace Sandbox1
                 if (matches.Count > 1) { isE5 = true; }
 
                 //Create a node for this child if it doesn't exist, or update its parent node if needed.
-                if(!(nodeList.Any(treeNode => treeNode.nodeName == childNode)))
+                if(!(nodeList.Any(treeNode => treeNode.getNodeName() == childNode)))
                 {
                     treeNode newNode = createNode(childNode);
-                    newNode.parentName = parentNode;
+                    newNode.setParentName(parentNode);
                     nodeList.Add(newNode);
                 }
-                else if(nodeList.Find(treeNode => treeNode.nodeName == childNode).parentName == null)
+                else if(nodeList.Find(treeNode => treeNode.getNodeName() == childNode).getParentName() == "")
                 {
-                    nodeList.Find(treeNode => treeNode.nodeName == childNode).parentName = parentNode;
+                    nodeList.Find(treeNode => treeNode.getNodeName() == childNode).setParentName(parentNode);
                 }
 
                 //Create a node for the parent if it doesn't exist, with the child in the children list. If it does exist, add this child to children list
-                if (!(nodeList.Any(treeNode => treeNode.nodeName == parentNode)))
+                if (!(nodeList.Any(treeNode => treeNode.getNodeName() == parentNode)))
                 {
                     treeNode newNode = createNode(parentNode);
-                    treeNode child = nodeList.Find(treenode => treenode.nodeName == childNode);
+                    treeNode child = nodeList.Find(treenode => treenode.getNodeName() == childNode);
                     newNode.addChild(child);
                     nodeList.Add(newNode);
                 }
                 else
                 {
-                    nodeList.Find(treeNode => treeNode.nodeName == parentNode).addChild(nodeList.Find(treenode => treenode.nodeName == childNode));
+                    nodeList.Find(treeNode => treeNode.getNodeName() == parentNode).addChild(nodeList.Find(treenode => treenode.getNodeName() == childNode));
                 }
             }
 
             //E4 - Multiple Roots
             //E5 bool check resolves if the error is not E4
-            List<treeNode> duplicateRootChecker = nodeList.FindAll(treeNode => treeNode.parentName == null);
+            List<treeNode> duplicateRootChecker = nodeList.FindAll(treeNode => treeNode.getParentName() == null);
             if(duplicateRootChecker.Count > 1)
             {
                 Console.WriteLine("E4");
@@ -85,14 +85,14 @@ namespace Sandbox1
             if(isE5) { Console.WriteLine("E5"); return; }
 
             Console.Write("(");
-            printTree(nodeList.Find(treeNode => treeNode.parentName == null));
+            printTree(nodeList.Find(treeNode => treeNode.getParentName() == ""));
             Console.WriteLine();
             return;
         }
 
         static void printTree(treeNode node)
         {
-            Console.Write(node.nodeName);
+            Console.Write(node.getNodeName());
             foreach(treeNode child in node.getChildren())
             {
                 Console.Write("(");
@@ -103,19 +103,35 @@ namespace Sandbox1
 
         public class treeNode
         {
-            //TODO: Privatize attributes, add getters and setters.
-            public string nodeName;
-            public string parentName = null;
+            private string nodeName = "";
+            private string parentName = "";
             private List<treeNode> children = new List<treeNode>();
+
+            public string getParentName()
+            {
+                return parentName;
+            }
+            public void setParentName(string name)
+            {
+                parentName = name;
+            }
 
             public List<treeNode> getChildren()
             {
                 return children;
             }
-
             public void addChild(treeNode node)
             {
                 children.Add(node);
+            }
+
+            public string getNodeName()
+            {
+                return nodeName;
+            }
+            public void setNodeName(string name)
+            {
+                nodeName = name;
             }
         }
 
@@ -123,7 +139,7 @@ namespace Sandbox1
         {
             //TODO: Ensure name matches expected format which is [A-Z]{1}
             treeNode node = new treeNode();
-            node.nodeName = name;
+            node.setNodeName(name);
 
             return node;
         }
