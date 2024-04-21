@@ -27,6 +27,7 @@ namespace Sandbox1
                 string parentNode = splitResult[0];
                 string childNode = splitResult[1];
 
+                #region "Error Checks E2,E3,E5"
                 //E2 - Duplicate Pair
                 //E3 - Parent has more than two children
                 string parentRegexPattern = parentNode + ",[A-Z]";
@@ -47,9 +48,10 @@ namespace Sandbox1
                 string childRegexPattern = "[A-Z]," + childNode;
                 MatchCollection matches = Regex.Matches(nodeDefinition, childRegexPattern);
                 if (matches.Count > 1) { isE5 = true; }
+                #endregion
 
                 //Create a node for this child if it doesn't exist, or update its parent node if needed.
-                if(!(nodeList.Any(treeNode => treeNode.getNodeName() == childNode)))
+                if (!(nodeList.Any(treeNode => treeNode.getNodeName() == childNode)))
                 {
                     treeNode newNode = createNode(childNode);
                     newNode.setParentName(parentNode);
@@ -74,6 +76,7 @@ namespace Sandbox1
                 }
             }
 
+            #region "Error checks E4,E5"
             //E4 - Multiple Roots
             //E5 bool check resolves if the error is not E4
             List<treeNode> duplicateRootChecker = nodeList.FindAll(treeNode => treeNode.getParentName() == null);
@@ -83,6 +86,7 @@ namespace Sandbox1
                 return;
             }
             if(isE5) { Console.WriteLine("E5"); return; }
+            #endregion
 
             Console.Write("(");
             printTree(nodeList.Find(treeNode => treeNode.getParentName() == ""));
@@ -107,15 +111,6 @@ namespace Sandbox1
             private string parentName = "";
             private List<treeNode> children = new List<treeNode>();
 
-            public string getParentName()
-            {
-                return parentName;
-            }
-            public void setParentName(string name)
-            {
-                parentName = name;
-            }
-
             public List<treeNode> getChildren()
             {
                 return children;
@@ -125,6 +120,7 @@ namespace Sandbox1
                 children.Add(node);
             }
 
+            #region "Getters and Setters"
             public string getNodeName()
             {
                 return nodeName;
@@ -133,6 +129,15 @@ namespace Sandbox1
             {
                 nodeName = name;
             }
+            public string getParentName()
+            {
+                return parentName;
+            }
+            public void setParentName(string name)
+            {
+                parentName = name;
+            }
+            #endregion
         }
 
         static treeNode createNode(string name)
