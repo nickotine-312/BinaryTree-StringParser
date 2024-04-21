@@ -42,12 +42,13 @@ namespace Sandbox1
 
                 //E5 - input contains cycle (child with more than one parent)
                 //A subset of E4 errors were misreported as E5 when two roots share a child node. 
-                //Fixed by setting a boolean flag, then we finish processing the list. After processing, we first check for E4 to catch these more specific cases. If we do not find E4, bool is checked, and E5 is reported.
+                //Fixed by setting a boolean flag, then we finish processing the list.
+                //After processing, we first check for E4 to catch these more specific cases. If we do not find E4, bool is checked, and E5 is reported.
                 string childRegexPattern = "[A-Z]," + childNode;
                 MatchCollection matches = Regex.Matches(nodeDefinition, childRegexPattern);
                 if (matches.Count > 1) { isE5 = true; }
 
-                //Create a node for this child if it doesn't exist, and update its parent node if needed.
+                //Create a node for this child if it doesn't exist, or update its parent node if needed.
                 if(!(nodeList.Any(treeNode => treeNode.nodeName == childNode)))
                 {
                     treeNode newNode = createNode(childNode);
