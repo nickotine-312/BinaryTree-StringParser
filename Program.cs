@@ -7,12 +7,13 @@ namespace Sandbox1
 {
     internal class Program
     {
+        //TODO: Clean up LINQ code, replace with functions where possible. 
         static void Main(string[] args)
         {
             List<treeNode> nodeList = new List<treeNode>();
             bool isE5 = false;
 
-            string nodeDefinition = "(A,B) (A,C)";//"(F,Z) (A,B) (C,X) (B,D) (D,E) (E,R) (A,C) (C,F) (E,G) (D,Y)";
+            string nodeDefinition = "(F,Z) (A,B) (C,X) (B,D) (D,E) (E,R) (A,C) (C,F) (E,G) (D,Y)";
 
             //E1 - Invalid input format
             string formatRegexPattern = @"(\([A-Z],[A-Z]\)[ ]?)+";
@@ -63,7 +64,7 @@ namespace Sandbox1
                     nodeList.Find(treeNode => treeNode.nodeName == childNode).parentName = parentNode;
                 }
 
-                //Create a node for the parent if it doesn't exist, with the child in the children list. If it does exist, add this child to children list.
+                //Create a node for the parent if it doesn't exist, with the child in the children list. If it does exist, add this child to children list
                 if (!(nodeList.Any(treeNode => treeNode.nodeName == parentNode)))
                 {
                     treeNode newNode = createNode(parentNode);
@@ -89,7 +90,7 @@ namespace Sandbox1
 
             Console.Write("(");
             printTree(nodeList.Find(treeNode => treeNode.parentName == null));
-
+            Console.WriteLine();
             return;
         }
 
@@ -106,6 +107,7 @@ namespace Sandbox1
 
         public class treeNode
         {
+            //TODO: Privatize attributes, add getters and setters.
             public string nodeName;
             public string parentName = null;
             private List<treeNode> children = new List<treeNode>();
@@ -123,6 +125,7 @@ namespace Sandbox1
 
         static treeNode createNode(string name)
         {
+            //TODO: Ensure name matches expected format which is [A-Z]{1}
             treeNode node = new treeNode();
             node.nodeName = name;
 
