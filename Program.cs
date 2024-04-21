@@ -7,12 +7,10 @@ namespace Sandbox1
 {
     internal class Program
     {
-        //TODO: Clean up LINQ code, replace with functions where possible. 
         static void Main(string[] args)
         {
             List<treeNode> nodeList = new List<treeNode>();
             bool isE5 = false;
-
             string nodeDefinition = "(F,Z) (A,B) (C,X) (B,D) (D,E) (E,R) (A,C) (C,F) (E,G) (D,Y)";
 
             //E1 - Invalid input format
@@ -24,10 +22,7 @@ namespace Sandbox1
 
             foreach(string nodeDef in nodeDefinitions)
             {
-                string cleanedNodeString = nodeDef;
-                cleanedNodeString = cleanedNodeString.TrimStart('(');
-                cleanedNodeString = cleanedNodeString.TrimEnd(')');
-                string[] splitResult = cleanedNodeString.Split(',');
+                string[] splitResult = nodeDef.TrimStart('(').TrimEnd(')').Split(',');
 
                 string parentNode = splitResult[0];
                 string childNode = splitResult[1];
@@ -50,7 +45,7 @@ namespace Sandbox1
                 //Fixed by setting a boolean flag, then we finish processing the list. After processing, we first check for E4 to catch these more specific cases. If we do not find E4, bool is checked, and E5 is reported.
                 string childRegexPattern = "[A-Z]," + childNode;
                 MatchCollection matches = Regex.Matches(nodeDefinition, childRegexPattern);
-                if (matches.Count > 1) { isE5 = true; }//{ Console.WriteLine("E5"); return; }
+                if (matches.Count > 1) { isE5 = true; }
 
                 //Create a node for this child if it doesn't exist, and update its parent node if needed.
                 if(!(nodeList.Any(treeNode => treeNode.nodeName == childNode)))
